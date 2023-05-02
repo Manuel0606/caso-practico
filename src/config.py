@@ -12,7 +12,7 @@ config = {
 
 HOST = 'localhost'
 PORT = '5432'
-BD = 'bd_login' #caso_practico
+BD = 'caso_practico' #caso_practico
 USUARIO = 'postgres'
 PASSWORD = 'root'
 
