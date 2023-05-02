@@ -1,0 +1,83 @@
+{% extends './layout.html' %}
+
+{% block titulo %}Login{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/login.css')}}">
+{% endblock %}
+
+{% block body %}
+
+
+  <div class="container pt-4">
+    <h1 class="p-4">Recibos Públicos</h1>
+    <div class="row">
+      <div class="row">
+        <!-- *Formulario -->
+        <div class="col-md-4">
+          <div class="card card-body">
+            <form action="/consultar" method="POST">
+              <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor"
+                class="bi bi-person-circle" viewBox="0 0 16 16">
+                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                <path fill-rule="evenodd"
+                  d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
+              </svg>
+
+              <h1 class="h3 mb-3 fw-normal">Consultar Recibos</h1>
+
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+              <select class="form-select" name="torre" aria-label="Default select example">
+                <option selected>Número de la torre</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+              </select>
+
+              <select class="form-select" name="apartamento" aria-label="Default select example">
+                <option selected>Numero del apartamento</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+              </select>
+
+              <button class="w-100 btn btn-lg btn-primary" type="submit">Consultar</button>
+            </form>
+          </div>
+        </div>
+        <!-- *Recibos -->
+        <div class="col-md-8">
+          <h2>Recibos</h2>
+          <table class="table table-striped" id="tabla_personas">
+            <thead>
+              <td>Servicio</td>
+              <td>Consumo</td>
+              <td>Fecha Pago</td>
+              <td>Fecha Recibo</td>
+              <td>Valor</td>
+            </thead>
+            <tbody>
+              <td id="tabla_nombre">Luz</td>
+              <td id="tabla_apellido">2658</td>
+              <td id="tabla_telefono">03/04/2023</td>
+              <td id="tabla_telefono">05/04/2023</td>
+              <td id="tabla_telefono">30255</td>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}

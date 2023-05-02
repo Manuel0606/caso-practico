@@ -59,22 +59,28 @@ def add_user():
   cursor = con_bd.cursor()
   form = request.form
   email = form['email']
+  nombre = form['nombre']
   password = User.passwordHash(form['password'])
   if email and password:
     sql = """
     INSERT INTO
       users (
         email,
-        password
+        password,
+        nombre
       )
       VALUES
       ( %s, %s);
     """
-    cursor.execute(sql,(email, password))
+    cursor.execute(sql,(email, password, nombre))
     con_bd.commit()
     return redirect(url_for('index'))
   else:
     return "Error"
+  
+@app.route('/consultar')
+def consultar():
+  return render_template('consultar.html')
 
 @app.route('/home')
 @login_required
