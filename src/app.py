@@ -113,8 +113,24 @@ def crearTablaReciboPublicoApartamento():
         valor integer,
         fecha_corte timestamp without time zone,
         fecha_recibo timestamp without time zone,
-        foto_servicio_publico BYTEA,
         CONSTRAINT pk_recibo_publico_apartamento_id PRIMARY KEY (ID)
+        );
+    ''')
+    con_bd.commit()
+
+def crearTablaReciboPublicoTorre():
+    cursor = con_bd.cursor()
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS recibo_publico_apartamento(
+        id serial NOT NULL,
+        numero_torre character varying(30),
+        servicio_publico character varying(30),
+        consumo integer,
+        valor integer,
+        fecha_corte timestamp without time zone,
+        fecha_recibo timestamp without time zone,
+        foto_servicio_publico BYTEA,
+        CONSTRAINT pk_recibo_publico_torre_id PRIMARY KEY (ID)
         );
     ''')
     con_bd.commit()
