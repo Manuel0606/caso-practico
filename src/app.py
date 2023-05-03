@@ -78,29 +78,33 @@ def add_user():
   else:
     return "Error"
   
-@app.route('/consultar', methods=['POST'])
+@app.route('/consultar', methods=['GET', 'POST'])
 def consultar():
+    # debugger
+    crearTablaReciboPublicoApartamento()
     cursor = con_bd.cursor()
-    form = request.form
-    torre = form['torre']
-    apartamento = form['apartamento']
     recibos = []
-    if torre and apartamento:
-        try:
-            sql = """
-            SELECT
-                *
-            FROM
-                recibo_publico_apartamento
-            WHERE
-                torre = %s AND apartamento = %s;
-            """
-            cursor.execute(sql,(torre, apartamento))
-            con_bd.commit()
-            results = cursor.fetchall()
-        except Exception as e:
-            print(f'Error en la consulta, torre: {torre}, apartamento: {apartamento}' + e)
-            return redirect(request.referrer)
+    if request.method == 'POST':
+        form = request.form
+        torre = form['torre']
+        apartamento = form['apartamento']
+        if torre and apartamento:
+            import pdb; pdb.set_trace()
+            try:
+                sql = """
+                SELECT
+                    *
+                FROM
+                    recibo_publico_apartamento
+                WHERE
+                    torre = %s AND apartamento = %s;
+                """
+                cursor.execute(sql,(torre, apartamento))
+                con_bd.commit()
+                results = cursor.fetchall()
+            except Exception as e:
+                print(f'Error en la consulta, torre: {torre}, apartamento: {apartamento}' + e)
+                return redirect(request.referrer)
     else:
         try:
             sql = """
@@ -175,7 +179,7 @@ def crearTablaReciboPublicoApartamento():
 def crearTablaReciboPublicoTorre():
     cursor = con_bd.cursor()
     cursor.execute('''
-        CREATE TABLE IF NOT EXISTS recibo_publico_apartamento(
+        CREATE TABLE IF NOT EXISTS recibo_publico_torre(
         id serial NOT NULL,
         numero_torre character varying(30),
         servicio_publico character varying(30),
