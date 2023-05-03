@@ -28,6 +28,7 @@
 
               <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
+              <label>Torre</label>
               <select class="form-select" name="torre" aria-label="Default select example">
                 <option selected>Número de la torre</option>
                 <option value="1">1</option>
@@ -36,6 +37,7 @@
                 <option value="4">4</option>
               </select>
 
+              <label>Apartamento</label>
               <select class="form-select" name="apartamento" aria-label="Default select example">
                 <option selected>Numero del apartamento</option>
                 <option value="1">1</option>
@@ -50,6 +52,14 @@
                 <option value="10">10</option>
                 <option value="11">11</option>
                 <option value="12">12</option>
+              </select>
+
+              <label>Servicio Público</label>
+              <select class="form-select" name="servicio_publico" aria-label="Default select example">
+                <option selected>Todos</option>
+                <option value="Energía">Energía</option>
+                <option value="Agua">Agua</option>
+                <option value="Gas">Gas</option>
               </select>
 
               <button class="w-100 btn btn-lg btn-primary" type="submit">Consultar</button>
