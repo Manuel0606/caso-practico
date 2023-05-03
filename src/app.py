@@ -111,28 +111,35 @@ def consultar():
         form = request.form
         torre = form['torre']
         apartamento = form['apartamento']
-        if torre and apartamento:
-            import pdb; pdb.set_trace()
+        servicio_publico = form['servicio_publico']
+        if torre and apartamento and servicio_publico:
+            sql = """
+                SELECT *
+                FROM recibo_publico_apartamento
+                WHERE torre = %s AND apartamento = %s AND servicio_publico = %s;
+            """
+            cursor.execute(sql,(torre, apartamento, servicio_publico))
+        elif torre and apartamento:
+            sql = """
+                SELECT *
+                FROM recibo_publico_apartamento
+                WHERE torre = %s AND apartamento = %s;
+            """
+            cursor.execute(sql,(torre, apartamento))
             try:
-                sql = """
-                SELECT
-                    *
-                FROM
-                    recibo_publico_apartamento
-                WHERE
-                    torre = %s AND apartamento = %s;
-                """
-                cursor.execute(sql,(torre, apartamento))
                 con_bd.commit()
                 results = cursor.fetchall()
             except Exception as e:
                 flash(f'Error en la consulta, torre: {torre}, apartamento: {apartamento}' + e)
                 return redirect(request.referrer)
+        else:
+            flash('Elige una torre y un apartamento')
+            return redirect(request.referrer)
     else:
         try:
             sql = """
-            SELECT *
-            FROM recibo_publico_apartamento;
+                SELECT *
+                FROM recibo_publico_apartamento;
             """
             cursor.execute(sql)
             con_bd.commit()
