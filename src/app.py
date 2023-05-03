@@ -1,7 +1,10 @@
+from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for, flash
 from config import *
-from flask_login import LoginManager, login_user, logout_user, login_required
+from flask_login import LoginManager, current_user, login_user, logout_user, login_required
 from flask_wtf.csrf import CSRFProtect
+from werkzeug.utils import secure_filename
+import os
 # from flask_limiter import Limiter
 # from flask_limiter.util import get_remote_address
 
@@ -22,10 +25,25 @@ login_manager_app = LoginManager(app)
 def load_user(id):
     return ModelUser.get_by_id(con_bd, id)
 
+# Constantes
+
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'pdf', 'doc', 'docx'}
+
+# --------------------------------------------------
+# Rutas de la aplicación
+# --------------------------------------------------
+
+# Root
+
 @app.route('/')
 def index():
     crearTablaUsers()
     return redirect(url_for('login'))
+
+@app.route('/home')
+@login_required
+def home():
+    return render_template('home.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 # @limiter.limit("10/minute")
@@ -48,6 +66,12 @@ def login():
             return render_template('auth/login.html')
     else:
         return render_template('auth/login.html')
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('login'))
+
 
 @app.route('/new_user')
 def new_user():
@@ -80,7 +104,6 @@ def add_user():
   
 @app.route('/consultar', methods=['GET', 'POST'])
 def consultar():
-    # debugger
     crearTablaReciboPublicoApartamento()
     cursor = con_bd.cursor()
     recibos = []
@@ -103,7 +126,7 @@ def consultar():
                 con_bd.commit()
                 results = cursor.fetchall()
             except Exception as e:
-                print(f'Error en la consulta, torre: {torre}, apartamento: {apartamento}' + e)
+                flash(f'Error en la consulta, torre: {torre}, apartamento: {apartamento}' + e)
                 return redirect(request.referrer)
     else:
         try:
@@ -115,7 +138,7 @@ def consultar():
             con_bd.commit()
             results = cursor.fetchall()
         except Exception as e:
-            print('Error en la consulta' + e)
+            flash('Error en la consulta: ' + e)
             return redirect(request.referrer)
     for row in results:
         recibo = {
@@ -134,15 +157,117 @@ def consultar():
         }
     return render_template('consultar.html', data=data)
 
-@app.route('/home')
+@app.route('/crear_recibo_publico_apartamento', methods=['POST'])
 @login_required
-def home():
-    return render_template('home.html')
+def crear_recibo_publico_apartamento():
+    crearTablaReciboPublicoApartamento()
+    if request.method == 'POST':
+        form = request.form
+        torre = form['torre']
+        apartamento = form['apartamento']
+        servicio_publico = form['servicio_publico']
+        consumo = form['consumo']
+        valor = form['valor']
+        fecha_corte = form['fecha_corte']
+        fecha_recibo = form['fecha_recibo']
+        if torre and apartamento and servicio_publico and consumo and valor and fecha_corte and fecha_recibo:
+            cursor = con_bd.cursor()
+            try:
+                sql = """
+                INSERT INTO
+                    recibo_publico_apartamento (
+                        torre,
+                        apartamento,
+                        servicio_publico,
+                        consumo,
+                        valor,
+                        fecha_corte,
+                        fecha_recibo
+                    )
+                    VALUES
+                    ( %s, %s, %s, %s, %s, %s, %s);
+                """
+                cursor.execute(sql,(torre, apartamento, servicio_publico, consumo, valor, fecha_corte, fecha_recibo))
+                con_bd.commit()
+                flash('Recibo Publico Apartamento creado exitosamente')
+                return redirect(url_for('consultar'))
+            except Exception as e:
+                flash('Error en la consulta: ' + e)
+    return redirect(request.referrer)
 
-@app.route('/logout')
-def logout():
-    logout_user()
-    return redirect(url_for('login'))
+@app.route('/crear_recibo_publico_torre', methods=['POST'])
+@login_required
+def crear_recibo_publico_torre():
+    crearTablaReciboPublicoTorre()
+    if request.method == 'POST':
+        form = request.form
+        numero_torre = form['numero_torre']
+        servicio_publico = form['servicio_publico']
+        consumo = form['consumo']
+        valor = form['valor']
+        fecha_corte = form['fecha_corte']
+        fecha_recibo = form['fecha_recibo']
+        foto_servicio_publico = request.files['foto_servicio_publico']
+        
+        if foto_servicio_publico:
+            filename = secure_filename(foto_servicio_publico.filename)
+            if allowed_file(filename) == False:
+                flash('Error Al Crear El Post: El Archivo No Es Valido', 'danger')
+                return redirect(request.referrer)
+            base_path = os.path.dirname(__file__)
+            filename_complete = create_filename_complete(filename)
+            createUploadsFolder()
+            foto_servicio_publico_route = os.path.join(base_path, app.config['UPLOAD_FOLDER'], filename_complete)
+            try:
+                foto_servicio_publico.save(foto_servicio_publico_route)
+            except Exception as e:
+                flash('Error Al Crear El Post: ' + str(e), 'danger')
+        else:
+            filename_complete = ""
+
+        if numero_torre and servicio_publico and consumo and valor and fecha_corte and fecha_recibo:
+            cursor = con_bd.cursor()
+            try:
+                sql = """
+                INSERT INTO
+                    recibo_publico_torre (
+                        numero_torre,
+                        servicio_publico,
+                        consumo,
+                        valor,
+                        fecha_corte,
+                        fecha_recibo,
+                        foto_servicio_publico
+                    )
+                    VALUES
+                    ( %s, %s, %s, %s, %s, %s, %s);
+                """
+                cursor.execute(sql,(numero_torre, servicio_publico, consumo, valor, fecha_corte, fecha_recibo, filename_complete))
+                con_bd.commit()
+                flash('Recibo Publico Torre Creado Correctamente', 'success')
+                return redirect(url_for('consultar'))
+            except Exception as e:
+                flash('Error en la consulta: ' + e)
+    return redirect(request.referrer)
+
+def create_filename_complete(filename):
+    now = datetime.now()
+    short_date = now.strftime("%Y%m%d")
+    filename_complete = f"{short_date}_{str(current_user.id)}_{filename}"
+    return filename_complete
+
+def allowed_file(file):
+    file = file.split('.')
+    if file[1] in ALLOWED_EXTENSIONS:
+        return True
+    return False
+
+def createUploadsFolder():
+    base_path = os.path.dirname(__file__)
+    uploads_folder = os.path.join(base_path, app.config['UPLOAD_FOLDER'])
+    if not os.path.exists(uploads_folder):
+        os.makedirs(uploads_folder)
+
 
 
 def crearTablaUsers():
