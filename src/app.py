@@ -78,9 +78,57 @@ def add_user():
   else:
     return "Error"
   
-@app.route('/consultar')
+@app.route('/consultar', methods=['POST'])
 def consultar():
-  return render_template('consultar.html')
+    cursor = con_bd.cursor()
+    form = request.form
+    torre = form['torre']
+    apartamento = form['apartamento']
+    recibos = []
+    if torre and apartamento:
+        try:
+            sql = """
+            SELECT
+                *
+            FROM
+                recibo_publico_apartamento
+            WHERE
+                torre = %s AND apartamento = %s;
+            """
+            cursor.execute(sql,(torre, apartamento))
+            con_bd.commit()
+            results = cursor.fetchall()
+        except Exception as e:
+            print(f'Error en la consulta, torre: {torre}, apartamento: {apartamento}' + e)
+            return redirect(request.referrer)
+    else:
+        try:
+            sql = """
+            SELECT *
+            FROM recibo_publico_apartamento;
+            """
+            cursor.execute(sql)
+            con_bd.commit()
+            results = cursor.fetchall()
+        except Exception as e:
+            print('Error en la consulta' + e)
+            return redirect(request.referrer)
+    for row in results:
+        recibo = {
+            "id" : row[0],
+            "torre" : row[1],
+            "apartamento" : row[2],
+            "servicio_publico" : row[3],
+            "consumo" : row[4],
+            "valor" : row[5],
+            "fecha_corte" : row[6],
+            "fecha_recibo" : row[7]
+        }
+        recibos.append(recibo)
+    data = {
+            "recibos" : recibos
+        }
+    return render_template('consultar.html', data=data)
 
 @app.route('/home')
 @login_required

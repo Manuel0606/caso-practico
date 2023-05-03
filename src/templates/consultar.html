@@ -68,11 +68,18 @@
               <td>Valor</td>
             </thead>
             <tbody>
-              <td id="tabla_nombre">Luz</td>
-              <td id="tabla_apellido">2658</td>
-              <td id="tabla_telefono">03/04/2023</td>
-              <td id="tabla_telefono">05/04/2023</td>
-              <td id="tabla_telefono">30255</td>
+              {% if data.recibos %}
+                {% for recibo in data.recibos %}
+                  <td id="tabla_nombre{{recibo['id']}}">{{ recibo['servicio_publico'] }}</td>
+                  <td id="tabla_apellido{{recibo['id']}}">{{ recibo['consumo'] }}</td>
+                  <td id="tabla_telefono{{recibo['id']}}">{{ recibo['fecha_corte'].strftime("%Y-%m-%d") }}</td>
+                  <td id="tabla_telefono{{recibo['id']}}">{{ recibo['fecha_recibo'].strftime("%Y-%m-%d") }}</td>
+                  <td id="tabla_telefono{{recibo['id']}}">VALOR</td>
+                {% endfor %}
+              {% else %}
+                  <td colspan="5">No hay recibos</td>   
+              {% endif %}
+              
             </tbody>
           </table>
         </div>
