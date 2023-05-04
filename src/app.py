@@ -113,7 +113,7 @@ def calcular_valor(torre, consumo, servicio_publico, fecha_recibo):
         sql = """
                 SELECT *
                 FROM recibo_publico_torre
-                WHERE torre = %s AND servicio_publico = %s AND fecha_recibo = %s
+                WHERE numero_torre = %s AND servicio_publico = %s AND fecha_recibo = %s
             """
         cursor = con_bd.cursor()
         cursor.execute(sql, (torre, servicio_publico, fecha_recibo))
