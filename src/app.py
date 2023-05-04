@@ -260,11 +260,33 @@ def crear_recibo_publico_torre():
                 """
                 cursor.execute(sql,(numero_torre, servicio_publico, consumo, valor, fecha_corte, fecha_recibo, filename_complete))
                 con_bd.commit()
+                crear_recibos_publicos_apartamentos(numero_torre, servicio_publico, fecha_corte, fecha_recibo)
                 flash('Recibo Publico Torre Creado Correctamente', 'success')
                 return redirect(url_for('consultar'))
             except Exception as e:
                 flash('Error en la consulta: ' + e)
     return redirect(request.referrer)
+
+def crear_recibos_publicos_apartamentos(numero_torre, servicio_publico, fecha_corte, fecha_recibo):
+    cursor = con_bd.cursor()
+    sql = """
+        INSERT INTO
+            recibo_publico_apartamento (
+                torre,
+                apartamento,
+                servicio_publico,
+                fecha_corte,
+                fecha_recibo
+            )
+            VALUES
+            ( %s, %s, %s, %s, %s, %s, %s);
+    """
+    try:
+        for i in range(1, 13):
+            cursor.execute(sql,(numero_torre, str(i), servicio_publico, fecha_corte, fecha_recibo))
+            con_bd.commit()
+    except Exception as e:
+        flash('Error en la creación de recibos publicos por apartamento: ' + e)
 
 def create_filename_complete(filename):
     now = datetime.now()
