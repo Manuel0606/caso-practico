@@ -77,6 +77,78 @@ def apartamento():
     except Exception as e:
         flash('Error: ' + str(e))
         return redirect(request.referrer)
+    
+@app.route('/editar_apartamento/<int:id>', methods=['GET', 'POST'])
+@login_required
+def editar_apartamento(id):
+    crearTablaReciboPublicoApartamento()
+    if request.method == 'POST':
+        form = request.form
+        torre = form['torre']
+        apartamento = form['apartamento']
+        servicio_publico = form['servicio_publico']
+        consumo = form['consumo']
+
+        fecha_corte = form['fecha_corte']
+        fecha_recibo = form['fecha_recibo']
+        
+        valor = calcular_valor(torre, consumo, servicio_publico, fecha_recibo)
+        
+        sql = """
+            UPDATE recibo_publico_apartamento
+            SET torre = %s, apartamento = %s, servicio_publico = %s, consumo = %s, valor = %s, fecha_corte = %s, fecha_recibo = %s
+            WHERE id = %s
+        """
+        try:
+            cursor = con_bd.cursor()
+            cursor.execute(sql, (torre, apartamento, servicio_publico, consumo, str(valor), fecha_corte, fecha_recibo, id))
+            con_bd.commit()
+            flash('Actualizado correctamente')
+            return redirect(url_for('apartamento'))
+        except Exception as e:
+            flash('Error al actualizar: ' + str(e))
+    else:
+        sql = """
+            SELECT *
+            FROM recibo_publico_apartamento
+            WHERE id = %s
+        """
+        cursor = con_bd.cursor()
+        cursor.execute(sql, (id,))
+        result = cursor.fetchone()
+        recibo = {
+            "id": result[0],
+            "torre": result[1],
+            "apartamento": result[2],
+            "servicio_publico": result[3],
+            "consumo": result[4],
+            "valor": result[5],
+            "fecha_corte": result[6],
+            "fecha_recibo": result[7]
+        }
+        data = {
+            "recibo": recibo
+        }
+        return render_template('editar_apartamento.html', data=data)
+    return redirect(request.referrer)
+    
+def calcular_valor(torre, consumo, servicio_publico, fecha_recibo):
+    try:
+        sql = """
+                SELECT *
+                FROM recibo_publico_torre
+                WHERE torre = %s AND servicio_publico = %s AND fecha_recibo = %s
+            """
+        cursor = con_bd.cursor()
+        cursor.execute(sql, (torre, servicio_publico, fecha_recibo))
+        recibo_publico_torre = cursor.fetchone()
+        
+        # consumo apartamento * valor torre / consumo torre
+        valor = float(consumo) * float(recibo_publico_torre[4]) / float(recibo_publico_torre[3])
+        return valor
+    except Exception as e:
+        flash('Error al calcular valor: ' + str(e))
+        return redirect(request.referrer)
 
 @app.route('/torre')
 @login_required
