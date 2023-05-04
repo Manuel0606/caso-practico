@@ -57,6 +57,7 @@ def apartamento():
 @app.route('/torre')
 @login_required
 def torre():
+    crearTablaReciboPublicoTorre()
     try:
         sql = """
             SELECT *
