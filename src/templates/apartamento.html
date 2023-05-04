@@ -101,16 +101,18 @@
                     <tbody>
                         {% if data.recibos %}
                         {% for recibo in data.recibos %}
-                        <td id="tabla_torre{{recibo['id']}}">{{ recibo['torre'] }}</td>
-                        <td id="tabla_apartamento{{recibo['id']}}">{{ recibo['apartamento'] }}</td>
-                        <td id="tabla_servicio_publico{{recibo['id']}}">{{ recibo['servicio_publico'] }}</td>
-                        <td id="tabla_consumo{{recibo['id']}}">{{ recibo['consumo'] }}</td>
-                        <td id="tabla_valor{{recibo['id']}}">{{ recibo['valor'] }}</td>
-                        <td id="tabla_fecha_corte{{recibo['id']}}">{{ recibo['fecha_corte'].strftime("%Y-%m-%d") if recibo['fecha_corte'] else "---" }}</td>
-                        <td id="tabla_fecha_recibo{{recibo['id']}}">{{ recibo['fecha_recibo'].strftime("%Y-%m-%d") if recibo['fecha_recibo'] else "---" }}</td>
-                        <td>
-                            <a class="btn btn-secondary btn-sm" onclick="obtenerDatosApartamento('{{ recibo['id'] }}')">Editar</a>
-                        </td>
+                        <tr>
+                            <td id="tabla_torre{{recibo['id']}}">{{ recibo['torre'] }}</td>
+                            <td id="tabla_apartamento{{recibo['id']}}">{{ recibo['apartamento'] }}</td>
+                            <td id="tabla_servicio_publico{{recibo['id']}}">{{ recibo['servicio_publico'] }}</td>
+                            <td id="tabla_consumo{{recibo['id']}}">{{ recibo['consumo'] }}</td>
+                            <td id="tabla_valor{{recibo['id']}}">{{ recibo['valor'] }}</td>
+                            <td id="tabla_fecha_corte{{recibo['id']}}">{{ recibo['fecha_corte'].strftime("%Y-%m-%d") if recibo['fecha_corte'] else "---" }}</td>
+                            <td id="tabla_fecha_recibo{{recibo['id']}}">{{ recibo['fecha_recibo'].strftime("%Y-%m-%d") if recibo['fecha_recibo'] else "---" }}</td>
+                            <td>
+                                <a class="btn btn-secondary btn-sm" onclick="obtenerDatosApartamento('{{ recibo['id'] }}')">Editar</a>
+                            </td>
+                        </tr>
                         {% endfor %}
                         {% else %}
                         <td colspan="8">No hay recibos</td>
