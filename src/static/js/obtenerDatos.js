@@ -1,5 +1,5 @@
 
-function obtenerDatos(id){
+function obtenerDatosApartamento(id){
     formulario = document.getElementById('formulario')
     btn = document.getElementById('btn')
     
