@@ -2,7 +2,7 @@
 
 {% block bodyHome %}
 <div class="container pt-4">
-    <h1 class="p-4">Recibos Públicos Apartamento</h1>
+    <h1 class="p-4">Recibos Públicos Torre</h1>
     <div class="row">
         <div class="row">
             <!-- *Formulario -->
@@ -26,26 +26,6 @@
                                 <option value="2">2</option>
                                 <option value="3">3</option>
                                 <option value="4">4</option>
-                            </select>
-                        </div>
-
-
-                        <div class="mb-3">
-                            <label>Apartamento</label>
-                            <select class="form-select" name="apartamento" aria-label="Default select example">
-                                <option selected>Numero del apartamento</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                                <option value="7">7</option>
-                                <option value="8">8</option>
-                                <option value="9">9</option>
-                                <option value="10">10</option>
-                                <option value="11">11</option>
-                                <option value="12">12</option>
                             </select>
                         </div>
 
@@ -78,6 +58,11 @@
                             <label for="fecha">Fecha de Recibo</label>
                             <input type="date" class="form-control" id="fecha_recibo" name="fecha_recibo" data-provide="datepicker">
                         </div>
+                        
+                        <div class="mb-3">
+                            <label for="foto_servicio_publico">Foto de Recibo</label>
+                            <input type="file" class="form-control" id="foto_servicio_publico" name="foto_servicio_publico" data-provide="datepicker">
+                        </div>
 
                         <button class="w-100 btn btn-lg btn-primary" type="submit">Editar</button>
                     </form>
@@ -100,13 +85,13 @@
                     <tbody>
                         {% if data.recibos %}
                         {% for recibo in data.recibos %}
-                        <td id="tabla_torre{{recibo['id']}}">{{ recibo['torre'] }}</td>
-                        <td id="tabla_apartamento{{recibo['id']}}">{{ recibo['apartamento'] }}</td>
+                        <td id="tabla_torre{{recibo['id']}}">{{ recibo['numero_torre'] }}</td>
                         <td id="tabla_servicio_publico{{recibo['id']}}">{{ recibo['servicio_publico'] }}</td>
                         <td id="tabla_consumo{{recibo['id']}}">{{ recibo['consumo'] }}</td>
                         <td id="tabla_valor{{recibo['id']}}">{{ recibo['valor'] }}</td>
                         <td id="tabla_fecha_corte{{recibo['id']}}">{{ recibo['fecha_corte'].strftime("%Y-%m-%d") }}</td>
                         <td id="tabla_fecha_recibo{{recibo['id']}}">{{ recibo['fecha_recibo'].strftime("%Y-%m-%d") }}</td>
+                        <td id="tabla_foto_servicio_publico{{recibo['id']}}">{{ recibo['foto_servicio_publico'] }}</td>
                         <td>
                             <a class="btn btn-secondary btn-sm" onclick="obtenerDatosApartamento('{{ recibo['id'] }}')">Editar</a>
                         </td>
@@ -121,4 +106,8 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/obtenerDatosTorre.js')}}"></script>
 {% endblock %}

@@ -54,6 +54,15 @@ def apartamento():
     }
     return render_template('apartamento.html', data=data)
 
+@app.route('/torre')
+@login_required
+def torre():
+    recibos = []
+    data = {
+        "recibos" : recibos
+    }
+    return render_template('torre.html', data=data)
+
 @app.route('/login', methods=['GET', 'POST'])
 # @limiter.limit("10/minute")
 def login():
