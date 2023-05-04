@@ -9,7 +9,7 @@
             <!-- *Formulario -->
             <div class="col-md-4">
                 <div class="card card-body">
-                    <form action="/crear_recibo_publico_apartamento" method="POST">
+                    <form action="/crear_recibo_publico_apartamento" id="formulario" method="POST">
                         <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-file-earmark-bar-graph" viewBox="0 0 16 16">
                             <path d="M10 13.5a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-6a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v6zm-2.5.5a.5.5 0 0 1-.5-.5v-4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-1zm-3 0a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-1z"/>
                             <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z"/>
@@ -21,7 +21,7 @@
 
                         <div class="mb-3">
                             <label>Torre</label>
-                            <select class="form-select" name="torre" aria-label="Default select example">
+                            <select class="form-select" id="torre" name="torre" aria-label="Default select example">
                                 <option selected>Número de la torre</option>
                                 <option value="1">1</option>
                                 <option value="2">2</option>
@@ -33,7 +33,7 @@
 
                         <div class="mb-3">
                             <label>Apartamento</label>
-                            <select class="form-select" name="apartamento" aria-label="Default select example">
+                            <select class="form-select" id="apartamento" name="apartamento" aria-label="Default select example">
                                 <option selected>Numero del apartamento</option>
                                 <option value="1">1</option>
                                 <option value="2">2</option>
@@ -52,7 +52,7 @@
 
                         <div class="mb-3">
                             <label>Servicio Público</label>
-                            <select class="form-select" name="servicio_publico" aria-label="Default select example">
+                            <select class="form-select" id="servicio_publico" name="servicio_publico" aria-label="Default select example">
                                 <option selected>Todos</option>
                                 <option value="Energía">Energía</option>
                                 <option value="Agua">Agua</option>
