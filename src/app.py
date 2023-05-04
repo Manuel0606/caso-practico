@@ -48,11 +48,35 @@ def home():
 @app.route('/apartamento')
 @login_required
 def apartamento():
-    recibos = []
-    data = {
-        "recibos" : recibos
-    }
-    return render_template('apartamento.html', data=data)
+    crearTablaReciboPublicoApartamento()
+    try:
+        sql = """
+            SELECT *
+            FROM recibo_publico_apartamento
+        """
+        cursor = con_bd.cursor()
+        cursor.execute(sql)
+        results = cursor.fetchall()
+        recibos = []
+        for row in results:
+            recibo = {
+                "id": row[0],
+                "torre": row[1],
+                "apartamento": row[2],
+                "servicio_publico": row[3],
+                "consumo": row[4],
+                "valor": row[5],
+                "fecha_corte": row[6],
+                "fecha_recibo": row[7]
+            }
+            recibos.append(recibo)
+        data = {
+            "recibos" : recibos
+        }
+        return render_template('apartamento.html', data=data)
+    except Exception as e:
+        flash('Error: ' + str(e))
+        return redirect(request.referrer)
 
 @app.route('/torre')
 @login_required
