@@ -1,5 +1,7 @@
 from .entities.User import User
 
+from flask import flash
+
 class ModelUser():
     
     @classmethod
@@ -16,7 +18,7 @@ class ModelUser():
             else: 
                 return None
         except Exception as ex:
-            print('Error: ', ex)
+            flash('Error: ', ex)
             raise Exception(ex)
     
     @classmethod
@@ -27,11 +29,10 @@ class ModelUser():
                         WHERE id = {}""".format(id)
             cursor.execute(sql)
             row = cursor.fetchone()
-            print(f'Hola {row[2]}')
             if row != None:
                 return User(row[0], row[1], None, row[2])
             else: 
                 return None
         except Exception as ex:
-            print('Error: ', ex)
+            flash('Error: ', ex)
             raise Exception(ex)
