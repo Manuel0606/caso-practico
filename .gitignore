@@ -1,6 +1,13 @@
 # Created by https://www.toptal.com/developers/gitignore/api/python,venv,visualstudiocode,windows
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,venv,visualstudiocode,windows
 
+### Flask ###
+instance/*
+!instance/.gitignore
+.webassets-cache
+.env
+src/static/uploads/
+
 ### Python ###
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -461,7 +461,7 @@ def crearTablaReciboPublicoTorre():
         valor integer,
         fecha_corte timestamp without time zone,
         fecha_recibo timestamp without time zone,
-        foto_servicio_publico BYTEA,
+        foto_servicio_publico character varying(255),
         CONSTRAINT pk_recibo_publico_torre_id PRIMARY KEY (ID)
         );
     ''')
