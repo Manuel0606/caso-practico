@@ -69,23 +69,29 @@
           <h2>Recibos</h2>
           <table class="table table-striped" id="tabla_personas">
             <thead>
+              <td>Torre</td>
+              <td>Apartamento</td>
               <td>Servicio</td>
               <td>Consumo</td>
+              <td>Valor</td>
               <td>Fecha Corte</td>
               <td>Fecha Recibo</td>
-              <td>Valor</td>
             </thead>
             <tbody>
               {% if data.recibos %}
                 {% for recibo in data.recibos %}
-                  <td id="tabla_nombre{{recibo['id']}}">{{ recibo['servicio_publico'] }}</td>
-                  <td id="tabla_apellido{{recibo['id']}}">{{ recibo['consumo'] }}</td>
-                  <td id="tabla_telefono{{recibo['id']}}">{{ recibo['fecha_corte'].strftime("%Y-%m-%d") }}</td>
-                  <td id="tabla_telefono{{recibo['id']}}">{{ recibo['fecha_recibo'].strftime("%Y-%m-%d") }}</td>
-                  <td id="tabla_telefono{{recibo['id']}}">VALOR</td>
+                  <tr>
+                    <td id="tabla_torre{{recibo['id']}}">{{ recibo['torre'] }}</td> 
+                    <td id="tabla_apartamento{{recibo['id']}}">{{ recibo['apartamento'] }}</td> 
+                    <td id="tabla_servicio_publico{{recibo['id']}}">{{ recibo['servicio_publico'] }}</td>
+                    <td id="tabla_consumo{{recibo['id']}}">{{ recibo['consumo'] if recibo['consumo'] else "No definido aún" }}</td>
+                    <td id="tabla_valor{{recibo['id']}}">{{ recibo['valor'] if recibo['valor'] else "No definido aún" }}</td>
+                    <td id="tabla_fecha_corte{{recibo['id']}}">{{ recibo['fecha_corte'].strftime("%Y-%m-%d") }}</td>
+                    <td id="tabla_fecha_recibo{{recibo['id']}}">{{ recibo['fecha_recibo'].strftime("%Y-%m-%d") }}</td>
+                  </tr>
                 {% endfor %}
               {% else %}
-                  <td colspan="5">No hay recibos</td>   
+                  <td colspan="7">No hay recibos</td>   
               {% endif %}
               
             </tbody>

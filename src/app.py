@@ -124,19 +124,24 @@ def add_user():
 def consultar():
     crearTablaReciboPublicoApartamento()
     cursor = con_bd.cursor()
-    recibos = []
     if request.method == 'POST':
         form = request.form
         torre = form['torre']
         apartamento = form['apartamento']
         servicio_publico = form['servicio_publico']
-        if torre and apartamento and servicio_publico:
+        if torre and apartamento and (servicio_publico != 'Todos'):
             sql = """
                 SELECT *
                 FROM recibo_publico_apartamento
                 WHERE torre = %s AND apartamento = %s AND servicio_publico = %s;
             """
             cursor.execute(sql,(torre, apartamento, servicio_publico))
+            try:
+                con_bd.commit()
+                results = cursor.fetchall()
+            except Exception as e:
+                flash(f'Error en la consulta, torre: {torre}, apartamento: {apartamento}, servicio_publico: {servicio_publico}' + e)
+                return redirect(request.referrer)
         elif torre and apartamento:
             sql = """
                 SELECT *
@@ -165,6 +170,7 @@ def consultar():
         except Exception as e:
             flash('Error en la consulta: ' + e)
             return redirect(request.referrer)
+    recibos = []
     for row in results:
         recibo = {
             "id" : row[0],
@@ -232,7 +238,7 @@ def crear_recibo_publico_torre():
         valor = form['valor']
         fecha_corte = form['fecha_corte']
         fecha_recibo = form['fecha_recibo']
-        foto_servicio_publico = request.files['foto_servicio_publico']
+        foto_servicio_publico = request.files['foto_servicio_publico'] if 'foto_servicio_publico' in request.files else None
         
         if foto_servicio_publico:
             filename = secure_filename(foto_servicio_publico.filename)
@@ -288,7 +294,7 @@ def crear_recibos_publicos_apartamentos(numero_torre, servicio_publico, fecha_co
                 fecha_recibo
             )
             VALUES
-            ( %s, %s, %s, %s, %s, %s, %s);
+            ( %s, %s, %s, %s, %s);
     """
     try:
         for i in range(1, 13):
