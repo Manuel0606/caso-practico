@@ -28,5 +28,5 @@ function obtenerDatosApartamento(id){
     fecha_recibo.value = tabla_fecha_recibo.innerHTML
 
     formulario.action = `/editar_torre/${id}`
-    // btn.innerHTML = 'Actualizar'
+    btn.innerHTML = 'Actualizar'
 }
