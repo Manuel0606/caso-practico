@@ -2,6 +2,7 @@
 
 {% block bodyHome %}
 <div class="row">
+    {% include "partials/flash.html" %}
     <div class="col-sm-6 d-flex justify-content-center">
         <div class="card" style="width: 18rem;">
             <img src="{{ url_for('static', filename='assets/torre.jpeg')}}" style="height: 182px; object-fit: cover;" class="card-img-top" alt="...">

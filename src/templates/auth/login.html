@@ -17,6 +17,8 @@
 
     <h1 class="h3 mb-3 fw-normal">Iniciar Sesion</h1>
 
+    {% include "partials/flash.html" %}
+
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
     <div class="form-floating">

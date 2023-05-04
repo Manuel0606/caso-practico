@@ -3,6 +3,7 @@
 {% block bodyHome %}
 <div class="container pt-4">
     <h1 class="p-4">Recibos Públicos Torre</h1>
+    {% include "partials/flash.html" %}
     <div class="row">
         <div class="row">
             <!-- *Formulario -->
@@ -85,19 +86,23 @@
                     <tbody>
                         {% if data.recibos %}
                         {% for recibo in data.recibos %}
-                        <td id="tabla_torre{{recibo['id']}}">{{ recibo['numero_torre'] }}</td>
+                        <td id="tabla_torre{{recibo['id']}}">{{ recibo['torre'] }}</td>
                         <td id="tabla_servicio_publico{{recibo['id']}}">{{ recibo['servicio_publico'] }}</td>
                         <td id="tabla_consumo{{recibo['id']}}">{{ recibo['consumo'] }}</td>
                         <td id="tabla_valor{{recibo['id']}}">{{ recibo['valor'] }}</td>
-                        <td id="tabla_fecha_corte{{recibo['id']}}">{{ recibo['fecha_corte'].strftime("%Y-%m-%d") }}</td>
-                        <td id="tabla_fecha_recibo{{recibo['id']}}">{{ recibo['fecha_recibo'].strftime("%Y-%m-%d") }}</td>
-                        <td id="tabla_foto_servicio_publico{{recibo['id']}}">{{ recibo['foto_servicio_publico'] }}</td>
+                        <td id="tabla_fecha_corte{{recibo['id']}}">{{ recibo['fecha_corte'].strftime("%Y-%m-%d") if recibo['fecha_corte'] else "---" }}</td>
+                        <td id="tabla_fecha_recibo{{recibo['id']}}">{{ recibo['fecha_recibo'].strftime("%Y-%m-%d") if recibo['fecha_recibo'] else "---" }}</td>
+                        <td id="tabla_foto_servicio_publico{{recibo['id']}}">
+                            {% if recibo['foto_servicio_publico'] %}
+                                <img src="{{ url_for( 'static', filename='uploads/' + recibo['foto_servicio_publico'] ) }}" alt="Imagen" width="125px" height="125px">
+                            {% endif %}
+                        </td>
                         <td>
                             <a class="btn btn-secondary btn-sm" onclick="obtenerDatosApartamento('{{ recibo['id'] }}')">Editar</a>
                         </td>
                         {% endfor %}
                         {% else %}
-                        <td colspan="6">No hay recibos</td>
+                        <td colspan="8">No hay recibos</td>
                         {% endif %}
 
                     </tbody>

@@ -11,6 +11,7 @@
 
   <div class="container pt-4">
     <h1 class="p-4">Recibos Públicos</h1>
+    {% include "partials/flash.html" %}
     <div class="row">
       <div class="row">
         <!-- *Formulario -->
@@ -86,8 +87,8 @@
                     <td id="tabla_servicio_publico{{recibo['id']}}">{{ recibo['servicio_publico'] }}</td>
                     <td id="tabla_consumo{{recibo['id']}}">{{ recibo['consumo'] if recibo['consumo'] else "No definido aún" }}</td>
                     <td id="tabla_valor{{recibo['id']}}">{{ recibo['valor'] if recibo['valor'] else "No definido aún" }}</td>
-                    <td id="tabla_fecha_corte{{recibo['id']}}">{{ recibo['fecha_corte'].strftime("%Y-%m-%d") }}</td>
-                    <td id="tabla_fecha_recibo{{recibo['id']}}">{{ recibo['fecha_recibo'].strftime("%Y-%m-%d") }}</td>
+                    <td id="tabla_fecha_corte{{recibo['id']}}">{{ recibo['fecha_corte'].strftime("%Y-%m-%d") if recibo['fecha_corte'] else "---" }}</td>
+                    <td id="tabla_fecha_recibo{{recibo['id']}}">{{ recibo['fecha_recibo'].strftime("%Y-%m-%d") if recibo['fecha_recibo'] else "---" }}</td>
                   </tr>
                 {% endfor %}
               {% else %}

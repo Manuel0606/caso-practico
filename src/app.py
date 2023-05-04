@@ -57,11 +57,34 @@ def apartamento():
 @app.route('/torre')
 @login_required
 def torre():
-    recibos = []
-    data = {
-        "recibos" : recibos
-    }
-    return render_template('torre.html', data=data)
+    try:
+        sql = """
+            SELECT *
+            FROM recibo_publico_torre
+        """
+        cursor = con_bd.cursor()
+        cursor.execute(sql)
+        results = cursor.fetchall()
+        recibos = []
+        for row in results:
+            recibo = {
+                "id": row[0],
+                "torre": row[1],
+                "servicio_publico": row[2],
+                "consumo": row[3],
+                "valor": row[4],
+                "fecha_corte": row[5],
+                "fecha_recibo": row[6],
+                "foto_servicio_publico": row[7]
+            }
+            recibos.append(recibo)
+        data = {
+            "recibos" : recibos
+        }
+        return render_template('torre.html', data=data)
+    except Exception as ex:
+        flash('Error: ' + str(ex))
+    return redirect(request.referrer)
 
 @app.route('/login', methods=['GET', 'POST'])
 # @limiter.limit("10/minute")
