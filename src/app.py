@@ -78,7 +78,7 @@ def apartamento():
         flash('Error: ' + str(e))
         return redirect(request.referrer)
     
-@app.route('/editar_apartamento/<int:id>', methods=['GET', 'POST'])
+@app.route('/editar_apartamento/<int:id>', methods=['POST'])
 @login_required
 def editar_apartamento(id):
     crearTablaReciboPublicoApartamento()
@@ -104,32 +104,8 @@ def editar_apartamento(id):
             cursor.execute(sql, (torre, apartamento, servicio_publico, consumo, str(valor), fecha_corte, fecha_recibo, id))
             con_bd.commit()
             flash('Actualizado correctamente')
-            return redirect(url_for('apartamento'))
         except Exception as e:
             flash('Error al actualizar: ' + str(e))
-    else:
-        sql = """
-            SELECT *
-            FROM recibo_publico_apartamento
-            WHERE id = %s
-        """
-        cursor = con_bd.cursor()
-        cursor.execute(sql, (id,))
-        result = cursor.fetchone()
-        recibo = {
-            "id": result[0],
-            "torre": result[1],
-            "apartamento": result[2],
-            "servicio_publico": result[3],
-            "consumo": result[4],
-            "valor": result[5],
-            "fecha_corte": result[6],
-            "fecha_recibo": result[7]
-        }
-        data = {
-            "recibo": recibo
-        }
-        return render_template('editar_apartamento.html', data=data)
     return redirect(request.referrer)
     
 def calcular_valor(torre, consumo, servicio_publico, fecha_recibo):
