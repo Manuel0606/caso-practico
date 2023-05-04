@@ -11,7 +11,7 @@ class ModelUser():
             cursor.execute(sql)
             row = cursor.fetchone()
             if row != None:
-                user = User(row[0], row[1], User.check_password(row[2], user.password))
+                user = User(row[0], row[1], User.check_password(row[2], user.password), row[3])
                 return user
             else: 
                 return None
@@ -23,12 +23,13 @@ class ModelUser():
     def get_by_id(self, db, id):
         try:
             cursor = db.cursor()
-            sql = """SELECT id, email FROM users
+            sql = """SELECT id, email, nombre FROM users
                         WHERE id = {}""".format(id)
             cursor.execute(sql)
             row = cursor.fetchone()
+            print(f'Hola {row[2]}')
             if row != None:
-                return User(row[0], row[1], None)
+                return User(row[0], row[1], None, row[2])
             else: 
                 return None
         except Exception as ex:

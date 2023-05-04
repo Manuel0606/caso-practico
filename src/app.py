@@ -43,7 +43,16 @@ def index():
 @app.route('/home')
 @login_required
 def home():
-    return render_template('home.html')
+    return render_template('usuario.html')
+
+@app.route('/apartamento')
+@login_required
+def apartamento():
+    recibos = []
+    data = {
+        "recibos" : recibos
+    }
+    return render_template('apartamento.html', data=data)
 
 @app.route('/login', methods=['GET', 'POST'])
 # @limiter.limit("10/minute")
@@ -52,7 +61,7 @@ def login():
     if request.method == 'POST':
         # print(request.form['email'])
         # print(request.form['password'])
-        user = User(0, request.form['email'], request.form['password'])
+        user = User(0, request.form['email'], request.form['password'], request.form['nombre'])
         logged_user = ModelUser.login(con_bd, user)
         if logged_user != None:
             if logged_user.password:
@@ -94,7 +103,7 @@ def add_user():
         nombre
       )
       VALUES
-      ( %s, %s);
+      ( %s, %s, %s);
     """
     cursor.execute(sql,(email, password, nombre))
     con_bd.commit()
@@ -160,8 +169,8 @@ def consultar():
         }
         recibos.append(recibo)
     data = {
-            "recibos" : recibos
-        }
+        "recibos" : recibos
+    }
     return render_template('consultar.html', data=data)
 
 @app.route('/crear_recibo_publico_apartamento', methods=['POST'])

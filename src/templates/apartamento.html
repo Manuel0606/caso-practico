@@ -1,0 +1,124 @@
+{% extends './home.html' %}
+
+{% block bodyHome %}
+<div class="container pt-4">
+    <h1 class="p-4">Recibos Públicos Apartamento</h1>
+    <div class="row">
+        <div class="row">
+            <!-- *Formulario -->
+            <div class="col-md-4">
+                <div class="card card-body">
+                    <form action="/consultar" method="POST">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-file-earmark-bar-graph" viewBox="0 0 16 16">
+                            <path d="M10 13.5a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-6a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v6zm-2.5.5a.5.5 0 0 1-.5-.5v-4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-1zm-3 0a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-1z"/>
+                            <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z"/>
+                        </svg>
+
+                        <h1 class="h3 mb-3 fw-normal">Editar Recibo</h1>
+
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                        <div class="mb-3">
+                            <label>Torre</label>
+                            <select class="form-select" name="torre" aria-label="Default select example">
+                                <option selected>Número de la torre</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                            </select>
+                        </div>
+
+
+                        <div class="mb-3">
+                            <label>Apartamento</label>
+                            <select class="form-select" name="apartamento" aria-label="Default select example">
+                                <option selected>Numero del apartamento</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Servicio Público</label>
+                            <select class="form-select" name="servicio_publico" aria-label="Default select example">
+                                <option selected>Todos</option>
+                                <option value="Energía">Energía</option>
+                                <option value="Agua">Agua</option>
+                                <option value="Gas">Gas</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="consumo" class="form-label">Consumo</label>
+                            <input type="text" class="form-control" id="consumo" name="consumo">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="valor" class="form-label">Valor</label>
+                            <input type="text" class="form-control" id="valor" name="valor">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="fecha">Fecha de Corte</label>
+                            <input type="date" class="form-control" id="fecha_corte" name="fecha_corte" data-provide="datepicker">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="fecha">Fecha de Recibo</label>
+                            <input type="date" class="form-control" id="fecha_recibo" name="fecha_recibo" data-provide="datepicker">
+                        </div>
+
+                        <button class="w-100 btn btn-lg btn-primary" type="submit">Editar</button>
+                    </form>
+                </div>
+            </div>
+            <!-- *Recibos -->
+            <div class="col-md-8">
+                <h2>Recibos</h2>
+                <table class="table table-striped" id="tabla_personas">
+                    <thead>
+                        <td>Torre</td>
+                        <td>Apartamento</td>
+                        <td>Servicio</td>
+                        <td>Consumo</td>
+                        <td>Valor</td>
+                        <td>Fecha Corte</td>
+                        <td>Fecha Recibo</td>
+                        <td>Opciones</td>
+                    </thead>
+                    <tbody>
+                        {% if data.recibos %}
+                        {% for recibo in data.recibos %}
+                        <td id="tabla_torre{{recibo['id']}}">{{ recibo['torre'] }}</td>
+                        <td id="tabla_apartamento{{recibo['id']}}">{{ recibo['apartamento'] }}</td>
+                        <td id="tabla_servicio_publico{{recibo['id']}}">{{ recibo['servicio_publico'] }}</td>
+                        <td id="tabla_consumo{{recibo['id']}}">{{ recibo['consumo'] }}</td>
+                        <td id="tabla_valor{{recibo['id']}}">{{ recibo['valor'] }}</td>
+                        <td id="tabla_fecha_corte{{recibo['id']}}">{{ recibo['fecha_corte'].strftime("%Y-%m-%d") }}</td>
+                        <td id="tabla_fecha_recibo{{recibo['id']}}">{{ recibo['fecha_recibo'].strftime("%Y-%m-%d") }}</td>
+                        <td>
+                            <a class="btn btn-secondary btn-sm" onclick="obtenerDatos('{{ recibo['id'] }}')">Editar</a>
+                        </td>
+                        {% endfor %}
+                        {% else %}
+                        <td colspan="6">No hay recibos</td>
+                        {% endif %}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

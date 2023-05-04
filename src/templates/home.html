@@ -1,10 +1,27 @@
-{% extends './layout.html' %}
+{% extends './layout.html' %} 
+{% block titulo %}Home{% endblock %} 
 
-{% block titulo %}Home{% endblock %}
+{% block body%}
 
-{% block body %}
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="/home">{{current_user.nombre}}</a>
+    </li>
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
+            aria-expanded="false">Menú</a>
+        <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="/torre">Torres</a></li>
+            <li><a class="dropdown-item" href="/apartamento">Apartamentos</a></li>
+            <li>
+                <hr class="dropdown-divider" />
+            </li>
+            <li><a class="dropdown-item" href="{{ url_for('logout') }}">Cerrar Sesión</a></li>
+        </ul>
+    </li>
+</ul>
 
-<h1>Bienvenido!!! {{ current_user.email }}</h1>
-<a class="btn btn-secondary" href="{{ url_for('logout') }}">Cerrar Sesión</a>
+{% block bodyHome %}
+{% endblock %}
 
 {% endblock %}
