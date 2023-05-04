@@ -112,7 +112,7 @@
                         </td>
                         {% endfor %}
                         {% else %}
-                        <td colspan="6">No hay recibos</td>
+                        <td colspan="8">No hay recibos</td>
                         {% endif %}
 
                     </tbody>
@@ -121,4 +121,8 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/obtenerDatosApartamento.js')}}"></script>
 {% endblock %}
