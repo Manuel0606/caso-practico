@@ -101,7 +101,7 @@ def editar_apartamento(id):
         """
         try:
             cursor = con_bd.cursor()
-            cursor.execute(sql, (torre, apartamento, servicio_publico, consumo, str(valor), fecha_corte, fecha_recibo, id))
+            cursor.execute(sql, (torre, apartamento, servicio_publico, int(consumo), valor, fecha_corte, fecha_recibo, id))
             con_bd.commit()
             flash('Actualizado correctamente')
         except Exception as e:
@@ -121,7 +121,7 @@ def calcular_valor(torre, consumo, servicio_publico, fecha_recibo):
         
         # consumo apartamento * valor torre / consumo torre
         valor = float(consumo) * float(recibo_publico_torre[4]) / float(recibo_publico_torre[3])
-        return valor
+        return int(valor)
     except Exception as e:
         flash('Error al calcular valor: ' + str(e))
         return redirect(request.referrer)
@@ -314,7 +314,7 @@ def crear_recibo_publico_apartamento():
                     VALUES
                     ( %s, %s, %s, %s, %s, %s, %s);
                 """
-                cursor.execute(sql,(torre, apartamento, servicio_publico, consumo, valor, fecha_corte, fecha_recibo))
+                cursor.execute(sql,(torre, apartamento, servicio_publico, int(consumo), int(valor), fecha_corte, fecha_recibo))
                 con_bd.commit()
                 flash('Recibo Publico Apartamento creado exitosamente')
                 return redirect(url_for('consultar'))
@@ -369,7 +369,7 @@ def crear_recibo_publico_torre():
                     VALUES
                     ( %s, %s, %s, %s, %s, %s, %s);
                 """
-                cursor.execute(sql,(numero_torre, servicio_publico, consumo, valor, fecha_corte, fecha_recibo, filename_complete))
+                cursor.execute(sql,(numero_torre, servicio_publico, int(consumo), int(valor), fecha_corte, fecha_recibo, filename_complete))
                 con_bd.commit()
                 crear_recibos_publicos_apartamentos(numero_torre, servicio_publico, fecha_corte, fecha_recibo)
                 flash('Recibo Publico Torre Creado Correctamente', 'success')
